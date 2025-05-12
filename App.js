@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, StyleSheet, Text, TextInput, useColorScheme, View } from 'react-native';
 import GoalInput from './components/GoalInput';
 import GoalItem from './components/GoalItem';
+import { StatusBar as RNStatusBar } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([])
   const [isVisible, setIsVisible] = useState(false)
+  const colorScheme = useColorScheme()
 
   const startAddGoalHandler = () => {
     setIsVisible(true)
@@ -25,26 +28,28 @@ export default function App() {
   }
 
   return (
-    <View style={styles.appContainer}>
-      <Button title='Add new Goal' color="#5e0acc" onPress={startAddGoalHandler}/>
-      <GoalInput onAddGoal={addGoalHandler} isVisible={isVisible} onCancel={closeModal}/>
-      <View style={styles.goalsContainer}>
-        <Text>List of goals...</Text>
-        <FlatList
-          data={courseGoals}
-          renderItem={(itemData)=> <GoalItem itemData={itemData} onDelete={deleteGoalHandler}/>}
-          keyExtractor={(item, index) => item.id}
-        />
+    <>
+      <StatusBar style="light" />
+      <View style={styles.appContainer}>
+        <Button title="Add new Goal" color="#a065ec" onPress={startAddGoalHandler}/>
+        <GoalInput onAddGoal={addGoalHandler} isVisible={isVisible} onCancel={closeModal}/>
+        <View style={styles.goalsContainer}>
+          <FlatList
+            data={courseGoals}
+            renderItem={(itemData)=> <GoalItem itemData={itemData} onDelete={deleteGoalHandler}/>}
+            keyExtractor={(item, index) => item.id}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   appContainer:{
     flex:1,
-    paddingTop:50,
-    paddingHorizontal:20
+    paddingTop:80,
+    paddingHorizontal:20,
   },
   goalsContainer:{
     flex:4
